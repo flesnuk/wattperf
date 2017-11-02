@@ -65,6 +65,16 @@ if N_PARALEL > N_CORES:
     raise ValueError("N_PARALEL > N_CORES")
 
 # BEGIN
+print ("cores = {}".format(N_CORES))
+print ("P-states")
+for i in range(N_PSTATES):
+    print ("P-estado {}: V={:.6f}, f={:.6f}".format(i, P_VOLTAGES[i], P_FREQS[i]))
+print ("T sec     = {}".format(SEQ_TIME))
+print ("P estado  = {}".format(PSTATE))
+for i in range(N_PARALEL):
+    print ("particion {}: trabajo = {}".format(i, WORK_DISTR[i]))
+print ()
+
 for combination in itertools.product(range(N_PSTATES), repeat=N_PARALEL):
     pstates = list(combination)
     for pstate_number in range(len(pstates)):
