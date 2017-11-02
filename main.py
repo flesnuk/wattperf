@@ -6,24 +6,12 @@ CONF_CORES      , N_CORES       = "cores",      4
 CONF_WBASE      , WBASE         = "wbase",      20
 CONF_WINACTIVE  , WINACTIVE     = "winactivo",  1.2 
 CONF_C          , C             = "c",          2.5
-CONF_N_PSTATES  , N_PSTATES     = "pstates",    6
 CONF_P_VOLTAGES , P_VOLTAGES    = "voltages",   [1.056, 1.080, 1.104, 1.16, 1.224, 1.28] # V
 CONF_P_FREQS    , P_FREQS       = "freqs",      [1.776, 1.888, 2.004, 2.338, 2.672, 3.006] # GHz
-CONF_SEQ_TIME   , SEQ_TIME      = "seq_time",   2300 # seconds
+CONF_SEQ_TIME   , SEQ_TIME      = "tiempo_secuencial",   2300 # seconds
+CONF_PSTATE     , PSTATE        = "pstate",    5    #pstate in which sequential time was taken
 CONF_N_PARALEL  , N_PARALEL     = "grado_paralelizacion",   4
 CONF_WORK_DISTR , WORK_DISTR    = "division_trabajo",       [15, 25, 25, 35]
-
-def MAX_VOLTAGE():
-    return P_VOLTAGES[N_PSTATES-1]
-
-def MIN_VOLTAGE():
-    return P_VOLTAGES[0]
-
-def MAX_FREQ():
-    return P_FREQS[N_PSTATES-1]
-
-def MIN_FREQ():
-    return P_FREQS[0]
 
 def dynamic_energy(voltage, freq):
     return C * pow(voltage, 2) * freq
@@ -65,6 +53,11 @@ else:
             WORK_DISTR = list(map(int,value.split(";")))
 
 # CHECK
+N_PSTATES = len(P_FREQS)
+
+if N_PSTATES != len(P_VOLTAGES):
+    raise ValueError("The length of P_VOLTAGES is not equal to the length of P_FREQS")
+
 if sum(WORK_DISTR) != 100:
     raise ValueError("The sum of WORK_DISTR is not equal to 100%")
 
@@ -83,7 +76,7 @@ for combination in itertools.product(range(N_PSTATES), repeat=N_PARALEL):
     
     for i in range(N_PARALEL):
         active_times[i] = int(SEQ_TIME * WORK_DISTR[i]/100.0 \
-                                * MAX_FREQ() / P_FREQS[pstates[i]])
+                                * P_FREQS[PSTATE] / P_FREQS[pstates[i]])
 
     MAX_TIME = max(active_times)
     
