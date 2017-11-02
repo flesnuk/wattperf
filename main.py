@@ -4,12 +4,12 @@ CONF_FNAME  = "conf.txt"
 CONF_COMMENT_PREFIX = "#"
 CONF_CORES      , N_CORES       = "cores",      4
 CONF_WBASE      , WBASE         = "wbase",      20
-CONF_WINACTIVE  , WINACTIVE     = "winactivo",  1.2 
-CONF_C          , C             = "c",          2.5
-CONF_P_VOLTAGES , P_VOLTAGES    = "voltages",   [1.056, 1.080, 1.104, 1.16, 1.224, 1.28] # V
-CONF_P_FREQS    , P_FREQS       = "freqs",      [1.776, 1.888, 2.004, 2.338, 2.672, 3.006] # GHz
+CONF_WINACTIVE  , WINACTIVE     = "wcoreinactivo",  1.2 
+CONF_C          , C             = "coreC",          2.5
+CONF_P_VOLTAGES , P_VOLTAGES    = "voltajes",   [1.056, 1.080, 1.104, 1.16, 1.224, 1.28] # V
+CONF_P_FREQS    , P_FREQS       = "frecuencias",      [1.776, 1.888, 2.004, 2.338, 2.672, 3.006] # GHz
 CONF_SEQ_TIME   , SEQ_TIME      = "tiempo_secuencial",   2300 # seconds
-CONF_PSTATE     , PSTATE        = "pstate",    5    #pstate in which sequential time was taken
+CONF_PSTATE     , PSTATE        = "pstate",    -1    #pstate in which sequential time was taken
 CONF_N_PARALEL  , N_PARALEL     = "grado_paralelizacion",   4
 CONF_WORK_DISTR , WORK_DISTR    = "division_trabajo",       [15, 25, 25, 35]
 
@@ -54,6 +54,8 @@ else:
 
 # CHECK
 N_PSTATES = len(P_FREQS)
+if PSTATE = -1:
+    PSTATE = len(P_FREQS-1)
 
 if N_PSTATES != len(P_VOLTAGES):
     raise ValueError("The length of P_VOLTAGES is not equal to the length of P_FREQS")
