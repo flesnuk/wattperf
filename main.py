@@ -24,7 +24,7 @@ except Exception:
 else:
     for line in file:
         line = line.strip()
-        if line.startswith("#") or line == "":
+        if line.startswith(CONF_COMMENT_PREFIX) or line == "":
             continue 
         temp = line.split("=")
         if len(temp) > 2:
